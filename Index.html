@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ecommerce Web</title>
+</head>
+<body>
+    <form id="myForm">
+        <label for="name">Selling Price:</label>
+        <input type="number" id="name" name="name">
+        <label for="name">Product Name:</label>
+        <input type="name" id="pname" name="email">
+        <input type="submit" value="Add Product">
+        <h1>Products</h1>
+    </form>
+    
+    <div id="displayData">
+    </div>
+
+    <script>
+        // JavaScript to handle form submission and store/retrieve data from localStorage
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Get values from the form
+            var name = document.getElementById("name").value;
+            var pname = document.getElementById("pname").value;
+            
+            // Retrieve existing data sets or initialize an empty array
+            var dataSets = JSON.parse(localStorage.getItem("dataSets")) || [];
+
+            // Add the new data set to the array
+            dataSets.push({ name, pname });
+
+            // Store the updated array in localStorage
+            localStorage.setItem("dataSets", JSON.stringify(dataSets));
+
+            // Display all data sets on the screen
+            displayData();
+        });
+
+        // Function to display all data sets on the screen
+        function displayData() {
+            var dataSets = JSON.parse(localStorage.getItem("dataSets")) || [];
+            var displayDataDiv = document.getElementById("displayData");
+            var count = 0;
+
+            displayDataDiv.innerHTML = ''; // Clear existing data
+
+            for (var i = 0; i < dataSets.length; i++) {
+                var dataSet = dataSets[i];
+                displayDataDiv.innerHTML +=  dataSet.name + "-";
+                count += parseInt(dataSet.name);
+                displayDataDiv.innerHTML +=  dataSet.pname+ " ";
+                displayDataDiv.innerHTML += '<button onclick="deleteData(' + i + ')">Delete</button>';
+                displayDataDiv.innerHTML += '<hr>'; // Add a horizontal line to separate data sets
+            }
+            displayDataDiv.innerHTML += "Total Value Worth of Products: Rs "+count;
+        }
+
+        // Retrieve and display data from localStorage on page load
+        window.addEventListener("load", function() {
+            displayData();
+        });
+
+        // Function to delete a specific data set
+        function deleteData(index) {
+            var dataSets = JSON.parse(localStorage.getItem("dataSets")) || [];
+            
+            if (index >= 0 && index < dataSets.length) {
+                dataSets.splice(index, 1);
+                localStorage.setItem("dataSets", JSON.stringify(dataSets));
+                displayData();
+            }
+        }
+    </script>
+</body>
+</html>
